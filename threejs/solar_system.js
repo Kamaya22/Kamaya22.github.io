@@ -376,8 +376,8 @@ function onDoubleClick(event)
             var coords = camera.position;
             var object = intersects[0].object;
             controls.target = new THREE.Vector3(cur_pos_x, object.position.y, cur_pos_z);
-            var cur_pos_x = object.position.x * Math.cos(object.parent.rotation.y);
-            var cur_pos_z = object.position.x * Math.sin(-object.parent.rotation.y);
+            var cur_pos_x = object.position.x * Math.cos(object.rotation.y);
+            var cur_pos_z = object.position.x * Math.sin(-object.rotation.y);
             var tween = new TWEEN.Tween(coords).to({x:cur_pos_x - 60, y:object.position.y + 20,z:cur_pos_z}, 2000).onUpdate(function(){
                 console.log(this.x, this.y);
             });
