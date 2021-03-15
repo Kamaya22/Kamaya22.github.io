@@ -374,7 +374,7 @@ function onDoubleClick(event)
         for (var i=0; i < intersects.length; i++)
         {
             var coords = camera.position;
-            var object = intersects[0].object;
+            var object = intersects[i].object;
             controls.target = new THREE.Vector3(cur_pos_x, object.position.y, cur_pos_z);
             var cur_pos_x = object.position.x * Math.cos(object.parent.rotation.y);
             var cur_pos_z = object.position.x * Math.sin(-object.parent.rotation.y);
@@ -382,12 +382,6 @@ function onDoubleClick(event)
                 console.log(this.x, this.y);
             });
             tween.start();
-            // canvas.onload = function(){
-            //     $.get("threejs/data.json", function(data, object){
-            //         var h1 = document.getElementById("h1");
-            //         h1.appendChild(data[object]["fun fact"]);
-            //     });
-            // }
             requestAnimationFrame(animation);
         }
         
