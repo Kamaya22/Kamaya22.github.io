@@ -41,10 +41,10 @@ const neptuneSunDistance = 25070000/2;
 function createSun(orbit) {    
     const material = new THREE.MeshPhongMaterial({
         // Diffuse Texture
-        map: new THREE.TextureLoader().load('/Solar_system/IMAGES/sun.jpeg'),
+        map: new THREE.TextureLoader().load('/IMAGES/sun.jpeg'),
 
         // Bump Texture
-        bumpMap: new THREE.TextureLoader().load('/Solar_system/IMAGES/sunbump.jpeg'),
+        bumpMap: new THREE.TextureLoader().load('/IMAGES/sunbump.jpeg'),
         bumpScale: 0.1,
     });
     const geometry = new THREE.SphereGeometry(sunRadius * zoomFactor, 50, 50);
