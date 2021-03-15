@@ -371,7 +371,7 @@ function onDoubleClick(event)
         mouse.y = - (event.clientY/canvas.height)*2 + 1;
         var raycaster = projector.pickingRay(mouse, camera);
       
-        var intersects = raycaster.intersectObjects(scene.children, true);
+        var intersects = raycaster.intersectObjects(scene.children);
         for (var i=0; i < intersects.length; i++)
         {
             var coords = camera.position;
