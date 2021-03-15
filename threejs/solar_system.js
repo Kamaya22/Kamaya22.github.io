@@ -217,7 +217,7 @@ function init() {
     //Create a scene
     scene = new THREE.Scene();
 
-    raycaster = new THREE.Raycaster();
+    projector = new THREE.Projector();
     mouse = new THREE.Vector2();
 
     //Add a camera
@@ -369,7 +369,8 @@ function onDoubleClick(event)
 
         mouse.x =(event.clientX/canvas.width)*2 - 1;
         mouse.y = - (event.clientY/canvas.height)*2 + 1;
-        raycaster.setFromCamera(mouse, camera);
+        var raycaster = projector.pickingRay(mouse, camera);
+      
         var intersects = raycaster.intersectObjects(scene.children, true);
         for (var i=0; i < intersects.length; i++)
         {
