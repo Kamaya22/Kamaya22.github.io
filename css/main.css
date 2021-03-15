@@ -1,0 +1,18 @@
+body {
+    margin: 0;
+    height: 100vh;
+}
+
+canvas {
+    display: block;
+}
+
+h1 {
+    font-family: "Akaya Kanadaka", sans-serif;
+    font-size: 3em;
+    margin: 0.67em 0;
+    position: relative;
+    left: 5em;
+    color:white;
+}
+

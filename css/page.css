@@ -1,0 +1,83 @@
+html {
+    color: #222;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    font-family: "Poppins", sans-serif;
+  }
+  
+
+body{
+    overflow: hidden;
+    margin: 0;
+
+}
+
+#text {
+    position: relative;
+    color: white;
+}
+
+.inner {
+    font-family: "Montserrat", sans-serif;
+    position: relative;
+    color: white;
+    font-size : 1.8em;
+}
+
+#loadButton {
+    background-color: #e4860b9f;
+    box-shadow: 0 5px 0 #c87d1c9f;
+    color: white;
+    position: relative;
+    text-decoration : none;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+    
+}
+
+
+a:active,
+a:hover{
+    outline: 0;
+    color: white;
+    
+}
+
+a {
+    color:white;
+}
+
+
+
+strong{
+    font-weight: bold;
+}
+
+h1{
+    font-family: "Akaya Kanadaka", sans-serif;
+    font-size: 3em;
+    margin: 0.67em 0;
+    position: relative;
+    left: 5em;
+    color:white;
+}
+
+.rectangle {
+    width: 800px;
+    height: 700px;
+    position: relative;
+    left: 18em;
+}
+
+.loader {
+    background: url('IMAGES/ajax-loader.gif') 50% 50% no-repeat rgba(255, 255, 255, 0.8);
+    cursor: wait;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top:0;
+    width: 100%;
+    z-index: 9999;
+
+}
