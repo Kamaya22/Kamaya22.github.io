@@ -375,7 +375,7 @@ function onDoubleClick(event)
         for (var i=0; i < intersects.length; i++)
         {
             var coords = camera.position;
-            var object = intersects[0].object;
+            var object = intersects[0];
             controls.target = new THREE.Vector3(cur_pos_x, object.position.y, cur_pos_z);
             var cur_pos_x = object.position.x * Math.cos(object.parent.rotation.y);
             var cur_pos_z = object.position.x * Math.sin(-object.parent.rotation.y);
