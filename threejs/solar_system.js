@@ -18,7 +18,7 @@ const jupiterRadius = (138850/2)*4;
 const saturnRadius = (114630/2)*4;
 const uranusRadius = (50530/2)*4;
 const neptuneRadius = (49100/2)*4;
-const moonRadius = 1737*6; //km
+const moonRadius = 1737*8; //km
 
 const earthMoonDistance = 38440*4; //km
 
@@ -376,8 +376,8 @@ function onDoubleClick(event)
             var coords = camera.position;
             var object = intersects[0].object;
             controls.target = new THREE.Vector3(cur_pos_x, object.position.y, cur_pos_z);
-            var cur_pos_x = object.position.x * Math.cos(object.rotation.y);
-            var cur_pos_z = object.position.x * Math.sin(-object.rotation.y);
+            var cur_pos_x = object.position.x * Math.cos(object.parent.rotation.y);
+            var cur_pos_z = object.position.x * Math.sin(-object.parent.rotation.y);
             var tween = new TWEEN.Tween(coords).to({x:cur_pos_x - 60, y:object.position.y + 20,z:cur_pos_z}, 2000).onUpdate(function(){
                 console.log(this.x, this.y);
             });
