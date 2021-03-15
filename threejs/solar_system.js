@@ -413,7 +413,6 @@ function setUpGui()
 
 function animation(time)
 {
-    
     requestAnimationFrame(animation);
     TWEEN.update(time);
 }
