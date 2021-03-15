@@ -372,7 +372,7 @@ function onDoubleClick(event)
         raycaster.setFromCamera(mouse, camera);
       
         var intersects = raycaster.intersectObjects(scene.children);
-        for (var i=0; i < intersects.length; i++)
+        if (intersects.length)
         {
             var coords = camera.position;
             var object = intersects[0];
