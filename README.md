@@ -7,5 +7,6 @@ It contains 2 HTML pages :
 * The solarSystem page which contains the solar system
 
 ### Demo
-[Demonstration](https://kamaya22.github.io/mainPage.html){.btn .btn-demonstration}
+[Demonstration](https://kamaya22.github.io/mainPage.html){#id .btn-demonstration}
+[Demonstration](#){.btn .btn-demonstration}
 
