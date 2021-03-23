@@ -1,31 +1,36 @@
 var renderer = null;
 var scene = null;
 var camera = null;
+var funFact = null;
 var curTime = Date.now();
 const zoomFactor = 0.0001;
 const baseURL = 'https://raw.githubusercontent.com/jeromeetienne/threex.planets/master/';
 const planetURL = 'https://raw.githubusercontent.com/dumitrux/solar-system-threejs/master/assets/textures/';
-
+const dataJSON = '{"earth": {"funFact": "Over 4.4 billion years ago, a Mars-size body smashed into a primitive Earth, launching our moon into permanent orbit around our planet.But a new study finds that this event could have had a much larger impact than previously thought. The collision could also have imbued our planet with the carbon, nitrogen and sulfur needed for life to form, scientists reported today (Jan. 23) in the journal Science Advances."},"mercury": {"funFact": "Mercury has been known to humanity since ancient times and although its discovery date is unknown, the first mentions of the planet are believed to be around 3000 BC by the Sumerians."},"venus": {"funFact": "It takes Venus longer to rotate once on its axis than to complete one orbit of the Sun. That’s 243 Earth days to rotate once - the longest rotation of any planet in the Solar System - and only 224.7 Earth days to complete one orbit of the Sun."},"mars": {"funFact":"The surface gravity of Mars is only 37% of what you would find on Earth, which makes it possible for volcanoes to be taller without collapsing. This is why we have Olympus Mons, the tallest volcano known on a planet in the Solar System. It’s 16 miles (25 kilometers) high and its diameter is approximately the same as the state of Arizona, according to NASA. But Mars also has a deep and wide canyon known as Valles Marineris, after the spacecraft (Mariner 9) that discovered it. In some parts, the canyon is 4 miles (7 kilometers) deep. According to NASA, the valley is as wide as the United States and is about 20% of the Red Planet’s diameter."},"jupiter": {"funFact":"Jupiter has a 67 confirmed and named satellites. However, it is estimated that the planet has over 200 natural satellites orbiting it. Almost all of them are less than 10 kilometers in diameter, and were only discovered after 1975, when the first spacecraft (Pioneer 10) arrived at Jupiter."},"saturn": {"funFact":"Determining the rotation speed of Saturn was actually very difficult to do, because the planet doesn’t have a solid surface. Unlike Mercury, you can’t just watch to see how long it takes for a specific crater to rotate back into view; astronomers needed to come up with a clever solution: the magnetic field.To determine the rotational speed of Saturn, astronomers had to measure the rotation of the planet’s magnetic field. By one measurement, Saturn takes 10 hours and 14 minutes to turn on its orbit, but when Cassini approached Saturn, it clocked the rotation at 10 hours and 45 minutes. Astronomers now agree on an average day of 10 hours, 32 minutes and 35 seconds."},"uranus": {"funFact":"Uranus has 27 known moons, and they are named after characters from the works of William Shakespeare and Alexander Pope."},"neptune": {"funFact": "The first person to have seen Neptune was likely Galileo, who marked it as a star in one of his drawings. However, since he did not identify it as a planet, he is not credited with the discovery. That credit goes to French mathematician Urbain Le Verrier and the English mathematician John Couch Adams, both of whom predicted that a new planet – known as Planet X – would be discovered in a specific region of the sky.When astronomer Johann Gottfried Galle actually found the planet in 1846, both mathematicians took credit for the discovery. English and French astronomers battled over who made the discovery first, and there are still defenders of each claim to this day. Today, the consensus among astronomers is that Le Verrier and Adams deserve equal credit for the discovery."}}';
+const data = JSON.parse(dataJSON);
+var h1 = document.createElement('h1');
 
 //We put here all the constants that we'll need for the solar system
+//Here I tried to take the real values but I changed it so it could be more visible on the screen
 //All the radius
-const sunRadius = 695500;  //km
+const sunRadius = 695500; 
 const mercuryRadius = (4880/2)*16;
 const venusRadius = (12100/2)*16;
-const earthRadius = (6371)*16; //km
+const earthRadius = (6371)*16; 
 const marsRadius = (6780/2)*16;
 const jupiterRadius = (138850/2)*4;
 const saturnRadius = (114630/2)*4;
 const uranusRadius = (50530/2)*4;
 const neptuneRadius = (49100/2)*4;
-const moonRadius = 1737*8; //km
+const moonRadius = 1737*6; 
 
-const earthMoonDistance = 38440*4; //km
+//Distance between Earth and the Moon.
+const earthMoonDistance = 38440*4; 
 
 //All the distances to the sun
 const mercurySunDistance = 800000 ;
 const venusSunDistance = 1080000 ;
-const earthSunDistance = 1500000; //10m
+const earthSunDistance = 1500000; 
 const marsSunDistance = 2280000;
 const jupiterSunDistance = 7780000/2;
 const saturnSunDistance = 14270000/2;
@@ -41,10 +46,10 @@ const neptuneSunDistance = 25070000/2;
 function createSun(orbit) {    
     const material = new THREE.MeshPhongMaterial({
         // Diffuse Texture
-        map: new THREE.TextureLoader().load("IMAGES/sun.jpeg"),
+        map: new THREE.TextureLoader().load('/Solar_system/IMAGES/sun.jpeg'),
 
         // Bump Texture
-        bumpMap: new THREE.TextureLoader().load("IMAGES/sunbump.jpeg"),
+        bumpMap: new THREE.TextureLoader().load('/Solar_system/IMAGES/sunbump.jpeg'),
         bumpScale: 0.1,
     });
     const geometry = new THREE.SphereGeometry(sunRadius * zoomFactor, 50, 50);
@@ -84,6 +89,7 @@ function createPlanet(name, size, distanceX, orbit, scene) {
     return mesh;
 };
 
+//This function returns the group that contains the planet and their orbit line
 function createOrbits() {
     const orbit = new THREE.Group();
     for (let i=0, j = arguments.length; i<j; i++)
@@ -93,6 +99,7 @@ function createOrbits() {
     return orbit;  
 }
 
+//This function returns the group that contains the moon and its orbit line
 function createMoonOrbit() {
     const orbit = new THREE.Group();
     orbit.position.set((earthSunDistance)*zoomFactor, 0, 0);
@@ -105,6 +112,7 @@ function createMoonOrbit() {
     return orbit;
 }
 
+//This function creates the orbit lines for every planet
 function createOrbitLines(distanceX, scene){
     const innerRadius = distanceX*zoomFactor - 1;
     const outerRadius = distanceX*zoomFactor + 1;
@@ -121,7 +129,7 @@ function createOrbitLines(distanceX, scene){
     scene.add(mesh);
 
 }
-//Creates the earth's clouds
+//Creates the earth's clouds (this function was taken from the internet)
 const createEarthClouds = () => {
     const canvasCloud = document.createElement('canvas');
     canvasCloud.width = 1024;
@@ -183,22 +191,6 @@ const createEarthClouds = () => {
         const mesh = new THREE.Mesh(geometry, material);
         return mesh;
     };
-
-//Creates the moon
-function createMoon() {
-
-    const geometry = new THREE.SphereGeometry(moonRadius*zoomFactor, 32, 32);
-    const material = new THREE.MeshPhongMaterial({
-        // Diffuse Texture
-        map: new THREE.TextureLoader().load('IMAGES/moonmap.jpeg'),
-
-        // Bump Texture
-        bumpMap: new THREE.TextureLoader().load('IMAGES/moonbump.jpeg'),
-        bumpScale: 0.002,
-     });
-    const mesh = new THREE.Mesh(geometry, material);
-    return mesh;
-};
 
 
 // This function is loaded whenever we load the document
@@ -293,8 +285,6 @@ function init() {
     neptune = createPlanet("neptune", neptuneRadius, neptuneSunDistance, neptuneOrbit, scene);
     createOrbitLines(neptuneSunDistance, scene);
     
-
-    //We create a moonGroup so we can rotate the moon itself and make it rotates around the earth
     moonOrbit = createMoonOrbit(earthOrbit);
     moon = createPlanet("moon", moonRadius, earthMoonDistance, moonOrbit, scene);
     createOrbitLines(earthMoonDistance, moonOrbit);
@@ -332,6 +322,7 @@ function animate(){
     curTime = now;
     var fracTime = deltaTime / 1000;
     //We put here the changes 
+    //the variable angle is based on the rotation of the earth 
     var angle = fracTime * Math.PI * 2;
 
     mercuryOrbit.rotation.y += angle/88;
@@ -363,6 +354,8 @@ function animate(){
     sun.rotation.y += angle/27;  
 }
 
+//When we double click on an object of the scene an animation starts and the camera goes towards the object's position
+//and a fun fact about the object get written on the screen. 
 function onDoubleClick(event)
     {
         event.preventDefault();
@@ -370,19 +363,60 @@ function onDoubleClick(event)
         mouse.x =(event.clientX/canvas.width)*2 - 1;
         mouse.y = - (event.clientY/canvas.height)*2 + 1;
         raycaster.setFromCamera(mouse, camera);
-      
-        var intersects = raycaster.intersectObjects(scene.children);
+        var intersects = raycaster.intersectObjects(scene.children, true);
         if (intersects.length)
         {
             var coords = camera.position;
-            var object = intersects[0];
-            controls.target = new THREE.Vector3(cur_pos_x, object.position.y, cur_pos_z);
-            var cur_pos_x = object.position.x * Math.cos(object.parent.rotation.y);
-            var cur_pos_z = object.position.x * Math.sin(-object.parent.rotation.y);
-            var tween = new TWEEN.Tween(coords).to({x:cur_pos_x - 60, y:object.position.y + 20,z:cur_pos_z}, 2000).onUpdate(function(){
-                console.log(this.x, this.y);
-            });
+            // I take the first object that the ray encounters
+            var planet = intersects[0].object;
+            var cur_pos_x = planet.position.x * Math.cos(planet.parent.rotation.y);
+            var cur_pos_z = planet.position.x * Math.sin(-planet.parent.rotation.y);
+            controls.target = new THREE.Vector3(cur_pos_x, planet.position.y, cur_pos_z);
+            var tween = new TWEEN.Tween(coords).to({x:cur_pos_x - 60, y:planet.position.y + 20,z:cur_pos_z}, 2000);
             tween.start();
+            // Depending on which planet we click on we get the right fun fact
+            if (planet.position.x == (zoomFactor*mercurySunDistance))
+            {
+                funFact = data.mercury.funFact;
+            }
+
+            if (planet.position.x == (zoomFactor*venusSunDistance))
+            {
+                funFact = data.venus.funFact;
+            }
+
+            if (planet.position.x == (zoomFactor*earthSunDistance))
+            {
+                funFact = data.earth.funFact;
+            }
+
+            if (planet.position.x == (zoomFactor*marsSunDistance))
+            {
+                funFact = data.mars.funFact;
+            }
+
+            if (planet.position.x == (zoomFactor*jupiterSunDistance))
+            {
+                funFact = data.jupiter.funFact;
+            }
+
+            if (planet.position.x == (zoomFactor*saturnSunDistance))
+            {
+                funFact = data.saturn.funFact;
+            }
+
+            if (planet.position.x == (zoomFactor*uranusSunDistance))
+            {
+                funFact = data.uranus.funFact;
+            }
+
+            if (planet.position.x == (zoomFactor*neptuneSunDistance))
+            {
+                funFact = data.neptune.funFact;
+            }
+            
+            h1.innerText = "Fun Fact : " + funFact;
+            document.body.appendChild(h1);
             requestAnimationFrame(animation);
         }
         
@@ -390,12 +424,11 @@ function onDoubleClick(event)
             
     }
 
+
+//This Gui is for further development if I need it later.
 function setUpGui()
 {   
-    //Loading the json file
-    
-    
-        //Definition of the controllers
+    //Definition of the controllers
     effectController = {
         mensaje : "Over 4.4 billion years ago, a Mars-size body smashed into a primitive Earth, launching our moon into permanent orbit around our planet.But a new study finds that this event could have had a much larger impact than previously thought. The collision could also have imbued our planet with the carbon, nitrogen and sulfur needed for life to form, scientists reported today (Jan. 23) in the journal Science Advances.",
         planet : []
@@ -410,11 +443,33 @@ function setUpGui()
 }
 
 
-
+//This function is for the TWEEN animations
 function animation(time)
 {
+    
     requestAnimationFrame(animation);
     TWEEN.update(time);
+}
+    
+
+//This function is for further uses it will allow me to draw a message bubble for the fun facts.
+function drawMessageBubble()
+{
+    if (canvas.getContext)
+    {
+        var ctx = canvas.getContext('2d');
+
+        //Formation of the bubble
+        ctx.beginPath();
+        ctx.moveTo(75, 25);
+        ctx.quadraticCurveTo(25, 25, 25, 62.5);
+        ctx.quadraticCurveTo(25, 100, 50, 100);
+        ctx.quadraticCurveTo(50, 120, 30, 125);
+        ctx.quadraticCurveTo(60, 120, 65, 100);
+        ctx.quadraticCurveTo(125, 100, 125, 62.5);
+        ctx.quadraticCurveTo(125, 25, 75, 25);
+        ctx.stroke();
+    }
 }
     
    
